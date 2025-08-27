@@ -7,7 +7,7 @@ const app = express();
 app.set('view engine', 'ejs');
 
 //ouvindo as requisições na porta
-app.listen(3001);
+app.listen(3002);
 
 //acessando a rota
 app.get('/', (req, res) => {
@@ -28,6 +28,9 @@ app.get('/sobre', (req, res) => {
 res.render('sobre', { titulo: 'Sobre Nós' });
 });
 
+app.get('/blog/criar', (req, res) => {
+res.render('criar', { titulo: 'Novo Blog' });
+});
 
 //redirecionamento de página
 app.get('/sobrenos', (req, res) => {
