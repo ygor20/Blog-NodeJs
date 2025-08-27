@@ -1,16 +1,65 @@
+var conexao =require("./conexao");
 const express = require('express');
-
-//Express aplicativo - configurando o acesso as funções
 const app = express();
+
+var bodyParser = require(`body-parser`);
+
+app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({ extended: true}));
+
 
 //registrar a visualização da engenharia
 app.set('view engine', 'ejs');
 
+
+conexao.connect(function(error){
+if(error){
+    console.error("Não foi possivel conectar ao banco de dados:", error);
+    process.exit(); 
+}
+});
+
+
+
 //ouvindo as requisições na porta
 app.listen(3002);
 
+
+
+
+
+
+
+
+
 //acessando a rota
 app.get('/', (req, res) => {
+
+        app.get(`/`, function(req, res){
+    res.sendFile(__dirname+`/criar.ejs`);
+
+});
+
+app.post(`/`, function(req, res) {
+   var titulo = req.body.titulo;
+   var txtcurto = req.body.txtcurto;
+   var conteudo = req.body.conteudo;
+
+
+
+   //prevenindo SQL injection
+   var sql = "INSERT INTO blog(titulo, txtcurto, conteudo) VALUES (?, ?, ?)";
+   conexao.query(sql, [titulo, txtcurto, conteudo], function(error, result){
+    if(error) throw error;
+
+    // res.send("Estudante cadastrado com sucesso!" + result.insertId);
+
+    res.redirect(`/blog`);
+  });
+
+
+});
 
 
 //Passando parâmetros para o body
